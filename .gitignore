@@ -1,0 +1,8 @@
+# dependências e caches
+node_modules/
+package-lock.json
+
+# segredos e arquivos de runtime
+.env
+config.json
+.DS_Store
