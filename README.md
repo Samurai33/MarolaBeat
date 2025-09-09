@@ -1,8 +1,4 @@
-Beleza ⚡ vou transformar isso num **README.md finalizado em Markdown** já no formato GitHub, com emojis, badges e tudo bem organizado para documentação do projeto.
 
----
-
-````markdown
 # 🎵 MarolaBeat (2025) — Discord Music Bot
 
 [![Node.js](https://img.shields.io/badge/node-20+-green.svg)](https://nodejs.org)  
@@ -121,10 +117,3 @@ marolabeat/
 ## 📜 Licença
 
 MIT © 2025 — Samurai33
-
-```
-
----
-
-👉 Quer que eu já prepare também a versão desse **README** com **badges extras** (ex.: PM2, Discord.js, Discord-Player, Docker Ready) para dar aquele look “projeto open-source profissional”?
-```
