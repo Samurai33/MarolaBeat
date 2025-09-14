@@ -9,24 +9,24 @@ export const command = new SlashCommandBuilder()
   .setDescription('Cria o canal de pedidos e o painel de controle');
 
 export async function execute(interaction) {
-  await interaction.deferReply({ ephemeral: true });
+  await interaction.deferReply({ flags: 64 });
 
-  const g = interaction.guild;
-  let chan = g.channels.cache.get(db[g.id]?.reqChan || '');
-  if (!chan) {
-    chan = await g.channels.create({
+  const guild = interaction.guild;
+  let channel = guild.channels.cache.get(db[guild.id]?.reqChan || '');
+  if (!channel) {
+    channel = await guild.channels.create({
       name: '🎵・pedidos',
       type: ChannelType.GuildText,
       permissionOverwrites: [
         {
-          id: g.roles.everyone,
+          id: guild.roles.everyone,
           allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
         }
       ]
     });
   }
-  db[g.id] = { ...(db[g.id] || {}), reqChan: chan.id };
+  db[guild.id] = { ...(db[guild.id] || {}), reqChan: channel.id };
   saveDB();
-  await ensurePanel(g, chan.id);
-  return safeRespond(interaction, '✅ Canal de pedidos pronto. Envie nome/URL do **YouTube** nele.');
+  await ensurePanel(guild, channel.id);
+  return safeRespond(interaction, '✅ Canal de pedidos pronto. Envie nome/URL do **YouTube** nele.', { flags: 64 });
 }

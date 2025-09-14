@@ -1,5 +1,5 @@
 import { Events } from 'discord.js';
-import { useQueue } from 'discord-player';
+
 import { getVoiceConnection } from '@discordjs/voice';
 import { db } from '../../lib/db.js';
 import { IDS, refreshPanel } from '../../ui/panel.js';
@@ -25,43 +25,27 @@ export const name = Events.InteractionCreate;
 export async function execute(interaction) {
   if (interaction.isChatInputCommand()) {
     const command = commands.get(interaction.commandName);
-
     if (!command) return;
-
+    // Sempre faz refresh do painel antes de executar o comando
+    const cfg = db[interaction.guildId];
+    if (cfg && cfg.reqChan) {
+      await refreshPanel(interaction.guildId);
+    }
     try {
       await command.execute(interaction);
     } catch (error) {
-      console.error(error);
-      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+      console.error('[interactionCreate error]', error);
+      if (!interaction.replied && !interaction.deferred) {
+        await interaction.reply({ content: '❌ Ocorreu um erro ao processar este comando.', ephemeral: true }).catch(() => {});
+      } else {
+        await interaction.followUp({ content: '❌ Ocorreu um erro ao processar este comando.' }).catch(() => {});
+      }
     }
   } else if (interaction.isButton()) {
     const cfg = db[interaction.guildId];
     if (!cfg || interaction.channelId !== cfg.reqChan) return;
-    const q = useQueue(interaction.guildId);
-    if (!q) return interaction.reply({ content: '⚠️ Nada tocando.', ephemeral: true });
-
-    try {
-      switch (interaction.customId) {
-        case IDS.PAUSE:
-          q.node.isPaused() ? q.node.resume() : q.node.pause();
-          break;
-        case IDS.SKIP:
-          q.node.skip();
-          break;
-        case IDS.STOP:
-          q.delete();
-          getVoiceConnection(interaction.guildId)?.destroy();
-          break;
-        case IDS.VDN:
-          q.node.setVolume(Math.max(0, (q.node.volume ?? 100) - 10));
-          break;
-        case IDS.VUP:
-          q.node.setVolume(Math.min(200, (q.node.volume ?? 100) + 10));
-          break;
-      }
-      await interaction.reply({ content: 'ok', ephemeral: true });
-    } finally {
-      refreshPanel(interaction.guildId);
-    }
+    // Controles de player removidos. Apenas responde OK para manter compatibilidade visual.
+    await interaction.reply({ content: 'ok', ephemeral: true });
+    refreshPanel(interaction.guildId);
   }
 }

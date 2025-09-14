@@ -1,6 +1,5 @@
 
 import { joinVoiceChannel } from '@discordjs/voice';
-import { useMainPlayer } from 'discord-player';
 
 export const userVC = (i) => i.member?.voice?.channel ?? null;
 
@@ -40,33 +39,4 @@ export async function safeRespond(interaction, content, { ephemeral = false, ...
   }
 }
 
-export async function playWithRetry(main, channel, query, requestedBy, nodeOptions) {
-  const attempt = async () => main.play(channel, query, { requestedBy, nodeOptions });
-
-  const withTimeout = async (ms) => {
-    return await Promise.race([
-      attempt(),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout: resolver/stream levou muito tempo')), ms))
-    ]);
-  };
-
-  try {
-    // 1ª tentativa (8s)
-    return await withTimeout(8000);
-  } catch (e) {
-    console.warn('[playWithRetry][1ª falha]', e?.message || e);
-
-    // Força reconexão de voz (especialmente no Windows)
-    try {
-      joinVoiceChannel({
-        channelId: channel.id,
-        guildId: channel.guild.id,
-        adapterCreator: channel.guild.voiceAdapterCreator,
-        selfDeaf: true
-      });
-    } catch {}
-
-    // 2ª tentativa (12s)
-    return await withTimeout(12000);
-  }
-}
+// playWithRetry removido (não é mais necessário)

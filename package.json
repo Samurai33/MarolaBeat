@@ -1,7 +1,7 @@
 {
   "name": "marolabeat",
   "version": "1.0.0",
-  "description": "Bot de música estilo MarolaBeat usando discord-player v7 + YouTubei (2025).",
+  "description": "Bot de música estilo MarolaBeat usando Discord.js 14 + @distube/ytdl-core (2025)",
   "private": true,
   "type": "module",
   "main": "index.js",
@@ -11,20 +11,24 @@
     "deploy:cmd": "node register-commands.js"
   },
   "engines": {
-    "node": ">=20.12.0 <=22.x"
+    "node": ">=20.10 <23"
   },
   "dependencies": {
     "@discordjs/opus": "^0.10.0",
-    "@discordjs/voice": "^0.16.0",
-    "discord-player": "^7.1.0",
-    "discord-player-youtubei": "^7.0.0",
-    "@discord-player/extractor": "^7.0.0",
+    "@discordjs/voice": "^0.17.0",
+    "@distube/ytdl-core": "^4.13.4",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5",
-    "ffmpeg-static": "^5.2.0",
-    "libsodium-wrappers": "^0.7.15"
+    "libsodium-wrappers": "^0.7.15",
+    "prism-media": "^1.3.5",
+    "sodium-native": "^5.0.8",
+    "tweetnacl": "^1.0.3",
+    "youtube-sr": "^4.3.4"
   },
   "optionalDependencies": {
     "@snazzah/davey": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
   }
 }

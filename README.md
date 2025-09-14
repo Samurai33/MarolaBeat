@@ -2,12 +2,13 @@
 # 🎵 MarolaBeat (2025) — Discord Music Bot
 
 [![Node.js](https://img.shields.io/badge/node-20+-green.svg)](https://nodejs.org)  
-Bot de música estilo **Hydra** para Discord, desenvolvido em **Node.js**, usando `discord.js v14` + `discord-player v7` + `youtubei`.  
+
+Bot de música estilo **Hydra** para Discord, desenvolvido em **Node.js**, usando apenas **YouTube API oficial** para busca e **play-dl** para streaming. Código limpo, moderno, sem dependências antigas.  
 
 ✅ Estável 24/7 com **PM2**  
 ✅ Alta qualidade (FFmpeg embutido via `ffmpeg-static`)  
-✅ Suporte a **YouTube, Spotify e SoundCloud**  
-✅ Painel interativo com botões (Play/Pause/Skip/Stop/Volume)  
+✅ Suporte a **YouTube** (apenas)  
+✅ Painel interativo com botões (Play/Stop/Volume)  
 
 ---
 
@@ -73,10 +74,11 @@ pm2 logs marolabeat
 
 ## 🎛️ Comandos Slash
 
-* `/setup` → Cria canal **🎵・pedidos** + painel Hydra
-* `/play <nome/url>` → Toca música (YouTube, Spotify, SoundCloud)
+
+* `/setup` → Cria canal **🎵・pedidos** + painel visual
+* `/play <nome/url>` → Toca música do **YouTube**
 * `/stop` → Para e desconecta o bot
-* *(Skip, Pause, Volume via botões interativos)*
+* *(Volume via botões interativos)*
 
 ---
 
@@ -84,8 +86,7 @@ pm2 logs marolabeat
 
 O bot cria automaticamente um painel fixo com botões de controle:
 
-* ⏯️ **Play/Pause**
-* ⏭️ **Skip**
+
 * ⏹️ **Stop**
 * 🔉 **Volume −10**
 * 🔊 **Volume +10**
@@ -105,9 +106,10 @@ marolabeat/
 
 ---
 
+
 ## 🔮 Backlog Futuro
 
-* `/pause`, `/resume`, `/queue`, `/np`, `/shuffle`, `/loop`
+* `/pause`, `/resume`, `/queue`, `/np`, `/shuffle`, `/loop` (não implementados)
 * Filtros de áudio (bassboost, nightcore, 8D, etc.)
 * Autodisconnect configurável
 * Painel web (dashboard)

@@ -1,6 +1,6 @@
 
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
-import { useQueue } from 'discord-player';
+
 import { db, saveDB } from '../lib/db.js';
 import client from '../lib/client.js';
 
@@ -15,16 +15,13 @@ export const controlsRow = () =>
     new ButtonBuilder().setCustomId(IDS.VUP).setLabel('🔊').setStyle(ButtonStyle.Secondary)
   );
 
-export const nowPlaying = (q) => {
-  const t = q?.currentTrack;
-  const e = new EmbedBuilder().setColor(0x2f3136).setTitle('🎶 MarolaBeat — Hydra style');
-  if (t) {
-    e.setDescription(`**Tocando:** [${t.title}](${t.url})`);
-    if (t.thumbnail) e.setThumbnail(t.thumbnail);
-  } else {
-    e.setDescription('Fila vazia. Envie **nome/URL do YouTube** neste canal.');
-  }
-  return e;
+
+export const nowPlaying = () => {
+  // Exibe mensagem genérica, pois não há mais fila/track
+  return new EmbedBuilder()
+    .setColor(0x2f3136)
+    .setTitle('🎶 MarolaBeat — Hydra style')
+    .setDescription('Envie **nome/URL do YouTube** neste canal.');
 };
 
 export async function ensurePanel(guild, chanId) {
@@ -41,6 +38,7 @@ export async function ensurePanel(guild, chanId) {
   return m;
 }
 
+
 export async function refreshPanel(gid) {
   const cfg = db[gid];
   if (!cfg?.reqChan) return;
@@ -48,5 +46,5 @@ export async function refreshPanel(gid) {
   if (!g) return;
   const msg = await ensurePanel(g, cfg.reqChan);
   if (!msg) return;
-  await msg.edit({ embeds: [nowPlaying(useQueue(gid))], components: [controlsRow()] }).catch(() => {});
+  await msg.edit({ embeds: [nowPlaying()], components: [controlsRow()] }).catch(() => {});
 }
