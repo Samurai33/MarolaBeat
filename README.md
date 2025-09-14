@@ -1,69 +1,54 @@
-
 # 🎵 MarolaBeat (2025) — Discord Music Bot
 
-[![Node.js](https://img.shields.io/badge/node-20+-green.svg)](https://nodejs.org)  
+[![Node.js](https://img.shields.io/badge/node-20+-green.svg)](https://nodejs.org)
+[![Discord.js](https://img.shields.io/badge/discord.js-14.x-blue.svg)](https://discord.js.org)
+[![YouTube](https://img.shields.io/badge/youtube-stable-red.svg)](https://youtube.com)
 
-Bot de música estilo **Hydra** para Discord, desenvolvido em **Node.js**, usando apenas **YouTube API oficial** para busca e **play-dl** para streaming. Código limpo, moderno, sem dependências antigas.  
-
-✅ Estável 24/7 com **PM2**  
-✅ Alta qualidade (FFmpeg embutido via `ffmpeg-static`)  
-✅ Suporte a **YouTube** (apenas)  
-✅ Painel interativo com botões (Play/Stop/Volume)  
+> **Bot de música robusto, moderno e legal para Discord.**
+> - Streaming 100% YouTube, headers/cookie, sem play-dl.
+> - Busca e painel interativo estilo Hydra.
+> - Código limpo, modular, pronto para produção 24/7.
 
 ---
 
-## 🚀 Pré-requisitos
-- **Node.js 20+ (LTS)**  
-- **FFmpeg** → já embutido (`ffmpeg-static`)  
-- Bot do Discord criado no [Developer Portal](https://discord.com/developers/applications)  
-  - **Token** do bot → `DISCORD_TOKEN`  
-  - **Application ID** → `CLIENT_ID`  
-  - **Guild ID** (ID do servidor alvo) → `GUILD_ID`  
+## 🚀 Requisitos
+- **Node.js 20+** (LTS recomendado)
+- **Token do Discord** ([crie aqui](https://discord.com/developers/applications))
+- **Cookie do YouTube** (opcional, mas recomendado para estabilidade)
 
 ---
 
 ## 📦 Instalação
 
-1. Clone o repositório:
-   ```bash
-   git clone <repo-url> marolabeat
-   cd marolabeat
-````
+```bash
+# Clone o projeto
+git clone <repo-url> marolabeat
+cd marolabeat
 
-2. Instale dependências:
+# Instale dependências
+npm install
+```
 
-   ```bash
-   npm install
-   ```
+Crie um arquivo `.env` na raiz:
 
-3. Crie um arquivo `.env` na raiz:
-
-   ```ini
-   DISCORD_TOKEN=seu_token_aqui
-   CLIENT_ID=sua_application_id
-   GUILD_ID=seu_guild_id
-   YOUTUBE_COOKIE=""
-   ```
+```ini
+DISCORD_TOKEN=seu_token_aqui
+YT_COOKIE=__Secure-xxxxxx
+YT_USER_AGENT=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+```
 
 ---
 
-## ▶️ Execução
-
-### Desenvolvimento
+## ▶️ Como rodar
 
 ```bash
+# Desenvolvimento
 npm run dev
-```
 
-### Produção simples
-
-```bash
+# Produção
 npm start
-```
 
-### Produção 24/7 (PM2)
-
-```bash
+# Produção 24/7 (PM2)
 npm install -g pm2
 pm2 start index.js --name marolabeat
 pm2 save
@@ -74,45 +59,68 @@ pm2 logs marolabeat
 
 ## 🎛️ Comandos Slash
 
+- `/setup` — Cria canal **🎵・pedidos** + painel visual
+- `/play <nome/url>` — Toca música do **YouTube** (busca ou URL)
+- `/stop` — Para e desconecta o bot
 
-* `/setup` → Cria canal **🎵・pedidos** + painel visual
-* `/play <nome/url>` → Toca música do **YouTube**
-* `/stop` → Para e desconecta o bot
-* *(Volume via botões interativos)*
-
----
-
-## 🎚️ Painel Hydra
-
-O bot cria automaticamente um painel fixo com botões de controle:
-
-
-* ⏹️ **Stop**
-* 🔉 **Volume −10**
-* 🔊 **Volume +10**
+> Volume: ajuste via botões do painel interativo
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🛠️ Stack & Arquitetura
+
+- **discord.js 14** — API moderna do Discord
+- **@distube/ytdl-core** — Streaming YouTube robusto (headers/cookie)
+- **youtube-sr** — Busca YouTube rápida e sem API key
+- **@discordjs/voice** — Áudio/voz nativo
+- **prism-media** — Demux/decodificação eficiente
+- **Painel visual** — UI com botões (stop, volume)
+- **.env** — Configuração segura
 
 ```
 marolabeat/
-├── index.js              # Código principal
+├── index.js
 ├── package.json
-├── config.json           # Persistência leve (painel/canais)
-├── .env                  # Variáveis de ambiente
+├── .env
+├── src/
+│   ├── commands/
+│   │   ├── play.js
+│   │   ├── stop.js
+│   │   └── setup.js
+│   ├── events/
+│   │   └── guild/interactionCreate.js
+│   ├── lib/
+│   └── utils/audio.js
 └── README.md
 ```
 
 ---
 
+## ⚡ Dicas e Troubleshooting
 
-## 🔮 Backlog Futuro
+- **ERR_INVALID_URL**: Certifique-se de que o comando `/play` está usando o utilitário de áudio moderno (`@distube/ytdl-core`) e que o cookie do YouTube está correto.
+- **Cannot play audio as no valid encryption package is installed**: Rode `npm install @discordjs/opus libsodium-wrappers sodium-native tweetnacl`.
+- **Bot não entra no canal de voz**: Verifique permissões do bot e se o canal existe.
+- **YouTube bloqueando**: Atualize o cookie e user-agent no `.env`.
 
-* `/pause`, `/resume`, `/queue`, `/np`, `/shuffle`, `/loop` (não implementados)
-* Filtros de áudio (bassboost, nightcore, 8D, etc.)
-* Autodisconnect configurável
-* Painel web (dashboard)
+---
+
+## 🔮 Futuro & Roadmap
+
+- `/pause`, `/resume`, `/queue`, `/np`, `/shuffle`, `/loop`
+- Filtros de áudio (bassboost, nightcore, 8D, etc.)
+- Autodisconnect configurável
+- Painel web/dashboard
+- Suporte a múltiplas plataformas (Spotify, SoundCloud, etc.)
+
+---
+
+## 🤝 Comunidade & Referências
+
+- [discord.js Guide](https://discordjs.guide/)
+- [@distube/ytdl-core](https://github.com/distubejs/ytdl-core)
+- [youtube-sr](https://github.com/DevSnowflake/youtube-sr)
+- [Bots open source: Hydra, Green-bot, DisTube, Erela.js]
 
 ---
 
